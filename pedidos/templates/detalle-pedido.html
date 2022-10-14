@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<main class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <h1 class="text-secondary">{{pedido.cliente}}</h1>
+
+
+            {{error}}
+
+
+            <form method="POST">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button class="btn btn-primary">
+                    Actualizar
+                </button>
+            </form>
+
+            <form class="mt-3 mb-3" action="{% url 'eliminar_pedido' pedido.id %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn-danger">
+                    Eliminar
+                </button>
+            </form>
+            <form action="{% url 'pedido_completo' pedido.id %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn-secondary">
+                    Enviado
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

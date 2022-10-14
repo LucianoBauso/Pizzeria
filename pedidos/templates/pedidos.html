@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<main class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="text-center display-3 py-5">Pedidos Pendientes</h1>
+
+            <ul class="list-group">
+                {% for pedido in pedidos %}
+                <div class="card m-3">
+                    <a class="list-group-item" href="{% url 'detalle_pedido' pedido.id %}">
+                        <header class="d-flex justify-content-between">
+                            <h1 class="fw-bold text-success">{{pedido.cliente}}</h1>
+                            <p> pedido creado por {{pedido.user.username}}</p>
+                        </header>
+                        <p>{{pedido.description}}</p>
+                        <p>{{pedido.enviado|date:'M j Y:i'}}</p>
+                    </a>
+                </div>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

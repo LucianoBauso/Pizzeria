@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<main class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="text-center display-3 py-5">Pedidos Completados</h1>
+
+            <ul class="list-group">
+                {% for pedido in pedidos %}
+                <div class="card m-3">
+                    <h1 class="fw-bold text-success mx-3 mt-2">Cliente: {{pedido.cliente}}</h1>
+                    <p class="mx-3">Solicito:</p>
+                    <ul>
+                        <li>{{pedido.pedido}}</li>
+                    </ul>
+                    <p class="mx-3"> pedido creado: {{pedido.user.username}}</p>
+                    <p class="mx-3">enviado: {{pedido.enviado|date:'M j Y:i'}}</p>
+                    </a>
+                </div>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
