@@ -13,7 +13,6 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from xml.dom.minidom import Document
 from django.contrib import admin
 from django.urls import path
 from pedidos import views
@@ -34,6 +33,7 @@ urlpatterns = [
     path('pedidos/<int:pedido_id>/', views.detalle_pedido, name='detalle_pedido'),
     path('pedido/<int:pedido_id>/completo', views.pedido_completo, name='pedido_completo'),
     path('pedido/<int:pedido_id>/eliminado', views.eliminar_pedido, name='eliminar_pedido'),
+    path('editarPerfil', views.editarPerfil, name="EditarPerfil"),
 ]
 
 if settings.DEBUG:
