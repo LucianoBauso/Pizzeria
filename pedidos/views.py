@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from .forms import PedidosForm
+from .forms import PedidosForm, UserEditForm
 from .models import Avatar, Pedidos
 
 def home(request):
@@ -126,3 +126,21 @@ def eliminar_pedido(request, pedido_id):
         pedido.delete()
         return redirect('pedidos')
 
+@login_required
+def editarPerfil(request):
+    usuario = request.user
+    user_basic_info = User.objects.get(id = usuario.id)
+    form = UserEditForm(request.POST, instance = usuario)
+    if request.method == 'POST':
+        if form.is_valid():
+            user_basic_info.username = form.cleaned_data.get('username')
+            user_basic_info.email = form.cleaned_data.get('email')
+            user_basic_info.first_name = form.cleaned_data.get('first_name')
+            user_basic_info.last_name = form.cleaned_data.get('last_name')
+            user_basic_info.save()
+            return redirect('pedidos')
+        else:
+            return redirect('pedidos')
+    else:
+        form = UserEditForm(initial = {'email': usuario.email, 'username': usuario.username, 'first_name': usuario.first_name, 'last_name': usuario.last_name})
+    return render(request, 'editarPerfil.html', {"form":form, "usuario":usuario})
