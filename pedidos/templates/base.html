@@ -23,6 +23,8 @@
         <ul class="navbar-nav ms-auto">
           
           {% if user.is_authenticated %}
+          <img height="40px" width="40px"  src="{{ url }}" class="mx-2"/>
+          <p class= "navbar-brand fs-5">Hola {{user.username}}</p>
           <li class="nav-item">
             <a href="/pedidos" class="nav-link">Pedidos Pendientes</a>
           </li>

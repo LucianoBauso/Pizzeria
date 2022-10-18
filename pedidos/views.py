@@ -6,7 +6,7 @@ from django.db import IntegrityError
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from .forms import PedidosForm
-from .models import Pedidos
+from .models import Avatar, Pedidos
 
 def home(request):
     return render(request,'home.html')
@@ -24,8 +24,7 @@ def registrarte(request):
             try:
                 user = User.objects.create_user(
                     username=request.POST['username'], 
-                    password=request.POST['password1'], 
-                    #imagen = request.POST['imagen'],
+                    password=request.POST['password1'],
                     email=request.POST['email'],)
                 user.save()
                 login(request, user)
@@ -61,6 +60,12 @@ def ingresar(request):
 def salir(request):
     logout(request)
     return redirect('home')
+
+@login_required
+def avatar(request):
+    avatares = Avatar.objects.filter(user=request.user.id)
+
+    return render(request,'base.html',{'url': avatares[0].imagen.url})
 
 @login_required
 def pedidos(request):
