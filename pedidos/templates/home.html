@@ -1,10 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<!DOCTYPE html>
+<html lang="en">
 
-<main>
-        <h1 class="display-1 text-center">Pizzeria</h1>
-        <p class="text-center">Acá va la página de inicio</p>
-</main>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pizzeria</title>
+  {%load static%}
+  <link rel="stylesheet" type= "text/css" href= "{% static 'web/css/style.css' %}">
+</head>
 
+<body>
+        <main>
+                <h1 class="display-1 text-center">Pizzeria</h1>
+                <hr>
+                <br>
+                <br>
+                <div>
+                  <img src="{% static 'web/img/pizza-gb99b0bee3_1920.jpg' %}" alt= "pizza">
+                </div>
+
+        </main>
+    
+</body>
+</html>
 {% endblock %}
