@@ -34,7 +34,8 @@ urlpatterns = [
     path('pedido/<int:pedido_id>/completo', views.pedido_completo, name='pedido_completo'),
     path('pedido/<int:pedido_id>/eliminado', views.eliminar_pedido, name='eliminar_pedido'),
     path('editarPerfil', views.editarPerfil, name="EditarPerfil"),
-    path('changepass', views.changepass),
+    path('cambiarContraseña', views.changepass),
+    path('agregarAvatar', views.agregarAvatar, name='AgregarAvatar'),
 ]
 
 if settings.DEBUG:

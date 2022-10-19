@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout, authenticate, update_session_auth
 from django.db import IntegrityError
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from .forms import PedidosForm, UserEditForm, ChangePasswordForm
+from .forms import PedidosForm, UserEditForm, ChangePasswordForm,AvatarFormulario
 from .models import Avatar, Pedidos
 
 def home(request):
@@ -63,39 +63,67 @@ def salir(request):
 
 @login_required
 def avatar(request):
-       
     avatares = Avatar.objects.filter(user=request.user.id)
     return render(request,'base.html',{'url': avatares[0].imagen.url})
 
 @login_required
 def pedidos(request):
-    pedidos = Pedidos.objects.filter(user=request.user, enviado__isnull=True)
-    avatares = Avatar.objects.filter(user=request.user.id)
-    return render(request, 'pedidos.html', {'pedidos': pedidos, 'url': avatares[0].imagen.url})
+    try:
+        pedidos = Pedidos.objects.filter(user=request.user, enviado__isnull=True)
+        avatares = Avatar.objects.filter(user=request.user.id)
+        return render(request, 'pedidos.html', {'pedidos': pedidos, 'url': avatares[0].imagen.url})
+    except:
+        pedidos = Pedidos.objects.filter(user=request.user, enviado__isnull=True)
+        return render(request, 'pedidos.html', {'pedidos': pedidos})
 
 @login_required
 def pedidos_completados(request):
-    pedidos = Pedidos.objects.filter(user=request.user, enviado__isnull=False).order_by('-enviado')
-    return render(request, 'pedidos-completados.html', {'pedidos': pedidos})
+    try:
+        pedidos = Pedidos.objects.filter(user=request.user, enviado__isnull=False).order_by('-enviado')
+        avatares = Avatar.objects.filter(user=request.user.id)
+        return render(request, 'pedidos-completados.html', {'pedidos': pedidos, 'url': avatares[0].imagen.url})
+    except:
+        pedidos = Pedidos.objects.filter(user=request.user, enviado__isnull=False).order_by('-enviado')
+        return render(request, 'pedidos-completados.html', {'pedidos': pedidos})
 
 @login_required
 def crear_pedido(request):
-    if request.method == 'GET':
-        return render(request, 'crear-pedido.html', {
-            'form': PedidosForm
-        })
-    else:
-        try:
-            form = PedidosForm(request.POST)
-            nuevo_pedido = form.save(commit=False)
-            nuevo_pedido.user = request.user
-            nuevo_pedido.save()
-            return redirect('pedidos')
-        except ValueError:
-            return render(request, 'crear-pedidos.html', {
-                'form': PedidosForm,
-                'error': 'Ingrese los datos correctos'
+    try:
+        if request.method == 'GET':
+            avatares = Avatar.objects.filter(user=request.user.id)
+            return render(request, 'crear-pedido.html', {
+                'url': avatares[0].imagen.url,
+                'form': PedidosForm
             })
+        else:
+            try:
+                form = PedidosForm(request.POST)
+                nuevo_pedido = form.save(commit=False)
+                nuevo_pedido.user = request.user
+                nuevo_pedido.save()
+                return redirect('pedidos')
+            except ValueError:
+                return render(request, 'crear-pedidos.html', {
+                    'form': PedidosForm,
+                    'error': 'Ingrese los datos correctos'
+                })
+    except:
+        if request.method == 'GET':
+            return render(request, 'crear-pedido.html', {
+                'form': PedidosForm
+            })
+        else:
+            try:
+                form = PedidosForm(request.POST)
+                nuevo_pedido = form.save(commit=False)
+                nuevo_pedido.user = request.user
+                nuevo_pedido.save()
+                return redirect('pedidos')
+            except ValueError:
+                return render(request, 'crear-pedidos.html', {
+                    'form': PedidosForm,
+                    'error': 'Ingrese los datos correctos'
+                })
 
 @login_required
 def detalle_pedido(request, pedido_id):
@@ -129,34 +157,97 @@ def eliminar_pedido(request, pedido_id):
 
 @login_required
 def editarPerfil(request):
-    usuario = request.user
-    user_basic_info = User.objects.get(id = usuario.id)
-    form = UserEditForm(request.POST, instance = usuario)
-    if request.method == 'POST':
-        if form.is_valid():
-            user_basic_info.username = form.cleaned_data.get('username')
-            user_basic_info.email = form.cleaned_data.get('email')
-            user_basic_info.first_name = form.cleaned_data.get('first_name')
-            user_basic_info.last_name = form.cleaned_data.get('last_name')
-            user_basic_info.save()
-            return redirect('pedidos')
+    try:
+        usuario = request.user
+        user_basic_info = User.objects.get(id = usuario.id)
+        avatares = Avatar.objects.filter(user=request.user.id)
+        form = UserEditForm(request.POST, instance = usuario)
+        if request.method == 'POST':
+            if form.is_valid():
+                user_basic_info.username = form.cleaned_data.get('username')
+                user_basic_info.email = form.cleaned_data.get('email')
+                user_basic_info.first_name = form.cleaned_data.get('first_name')
+                user_basic_info.last_name = form.cleaned_data.get('last_name')
+                
+                user_basic_info.save()
+                return redirect('pedidos')
+            else:
+                return redirect('pedidos')
         else:
-            return redirect('pedidos')
-    else:
-        form = UserEditForm(initial = {'email': usuario.email, 'username': usuario.username, 'first_name': usuario.first_name, 'last_name': usuario.last_name})
-    return render(request, 'editarPerfil.html', {"form":form, "usuario":usuario})
+            form = UserEditForm(initial = {'email': usuario.email, 'username': usuario.username, 'first_name': usuario.first_name, 'last_name': usuario.last_name})
+        return render(request, 'editarPerfil.html', {"form":form, "usuario":usuario, 'url': avatares[0].imagen.url})
+    except:
+        usuario = request.user
+        user_basic_info = User.objects.get(id = usuario.id)
+        form = UserEditForm(request.POST, instance = usuario)
+        if request.method == 'POST':
+            if form.is_valid():
+                user_basic_info.username = form.cleaned_data.get('username')
+                user_basic_info.email = form.cleaned_data.get('email')
+                user_basic_info.first_name = form.cleaned_data.get('first_name')
+                user_basic_info.last_name = form.cleaned_data.get('last_name')
+                
+                user_basic_info.save()
+                return redirect('pedidos')
+            else:
+                return redirect('pedidos')
+        else:
+            form = UserEditForm(initial = {'email': usuario.email, 'username': usuario.username, 'first_name': usuario.first_name, 'last_name': usuario.last_name})
+        return render(request, 'editarPerfil.html', {"form":form, "usuario":usuario})
+
 
 @login_required
 def changepass(request):
-    usuario = request.user
-    if request.method == 'POST':
-        #form = PasswordChangeForm(data = request.POST, user = usuario)
-        form = ChangePasswordForm(data = request.POST, user = request.user)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            return redirect('pedidos')
-    else:
-        #form = PasswordChangeForm(request.user)
-        form = ChangePasswordForm(user = request.user)
-    return render(request, 'changepass.html', {'form':form, 'usuario':usuario})
+    try:
+        usuario = request.user
+        avatares = Avatar.objects.filter(user=request.user.id)
+        if request.method == 'POST':
+            form = ChangePasswordForm(data = request.POST, user = request.user)
+            if form.is_valid():
+                user = form.save()
+                update_session_auth_hash(request, user)
+                return redirect('pedidos')
+        else:
+            
+            form = ChangePasswordForm(user = request.user)
+        return render(request, 'cambiarContraseña.html', {'form':form, 'usuario':usuario,'url': avatares[0].imagen.url})
+    except:
+        usuario = request.user
+        
+        if request.method == 'POST':
+            form = ChangePasswordForm(data = request.POST, user = request.user)
+            if form.is_valid():
+                user = form.save()
+                update_session_auth_hash(request, user)
+                return redirect('pedidos')
+        else:
+            
+            form = ChangePasswordForm(user = request.user)
+        return render(request, 'cambiarContraseña.html', {'form':form, 'usuario':usuario})
+
+@login_required
+def agregarAvatar(request):
+    try:
+        
+        if request.method== 'POST': 
+            miFormulario = AvatarFormulario(request.POST, request.FILES)      
+            if miFormulario.is_valid():            
+                user = User.objects.get(username=request.user)           
+                avatar = Avatar (user=user, imagen=miFormulario.cleaned_data['imagen'] , id=request.user.id)  
+                avatares = Avatar.objects.filter(user=request.user.id)       
+                avatar.save()            
+                return render(request, "pedidos.html")    
+        else:         
+            miFormulario=AvatarFormulario()    
+        return render(request, "agregarAvatar.html", {"miFormulario": miFormulario,'url': avatares[0].imagen.url})
+    except:
+        if request.method== 'POST': 
+            miFormulario = AvatarFormulario(request.POST, request.FILES)      
+            if miFormulario.is_valid():            
+                user = User.objects.get(username=request.user)           
+                avatar = Avatar (user=user, imagen=miFormulario.cleaned_data['imagen'] , id=request.user.id)         
+                avatar.save()            
+                return render(request, "pedidos.html")    
+        else:         
+            miFormulario=AvatarFormulario()    
+        return render(request, "agregarAvatar.html", {"miFormulario": miFormulario})
