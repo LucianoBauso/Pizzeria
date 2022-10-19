@@ -1,7 +1,7 @@
 from django import forms
 from .models import Pedidos
 
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
 
 
@@ -30,4 +30,14 @@ class UserEditForm(UserChangeForm):
         model = User
         fields = [ 'username', 'email', 'first_name', 'last_name', 'password']
         help_texts = {k:"" for k in fields}
-        
+
+class ChangePasswordForm(PasswordChangeForm):
+    
+    old_password = forms.CharField(label='Contraseña Vieja', widget= forms.PasswordInput)
+    new_password1 = forms.CharField(label='Nueva Contraseña', widget=forms.PasswordInput)
+    new_password2 = forms.CharField(label='Repetir contraseña', widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ['old_password', 'new_password1', 'new_password2']
+        help_texts = {k:"" for k in fields}

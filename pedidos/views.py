@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from django.db import IntegrityError
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from .forms import PedidosForm, UserEditForm
+from .forms import PedidosForm, UserEditForm, ChangePasswordForm
 from .models import Avatar, Pedidos
 
 def home(request):
@@ -145,3 +145,18 @@ def editarPerfil(request):
     else:
         form = UserEditForm(initial = {'email': usuario.email, 'username': usuario.username, 'first_name': usuario.first_name, 'last_name': usuario.last_name})
     return render(request, 'editarPerfil.html', {"form":form, "usuario":usuario})
+
+@login_required
+def changepass(request):
+    usuario = request.user
+    if request.method == 'POST':
+        #form = PasswordChangeForm(data = request.POST, user = usuario)
+        form = ChangePasswordForm(data = request.POST, user = request.user)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return redirect('pedidos')
+    else:
+        #form = PasswordChangeForm(request.user)
+        form = ChangePasswordForm(user = request.user)
+    return render(request, 'changepass.html', {'form':form, 'usuario':usuario})
