@@ -10,12 +10,13 @@
 </head>
 
 <body>
-
+  {%load static%}
   
-
-
   <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
     <div class="container">
+      <div>
+        <img height="40px" width="40px" src="{% static 'web/img/pizza.jpg' %}" alt= "icono" class="rounded-circle mx-3">
+      </div>
       <a class="navbar-brand" href="/">Pizzeria</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +28,7 @@
           
 
           {% if user.is_authenticated %}
-          <img height="40px" width="40px"  src="{{url}}" class="mx-2"/>
+          <img height="40px" width="40px"  src="{{url}}" class="mx-2 rounded-circle""/>
           <p class= "navbar-brand fs-5">Hola {{user.username}}</p>
           <li class="nav-item">
             <a href="/editarPerfil" class="nav-link">Editar Perfil</a>

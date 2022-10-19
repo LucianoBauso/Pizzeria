@@ -1,0 +1,18 @@
+{% extends 'base.html' %} 
+{% block content %}
+
+<main class="container">
+  <div class="row">
+    <div class="col-md-4 offset-md-4 mt-5">
+      <form method="POST"  enctype= "multipart/form-data" class="card card-body">
+        <p class="text-center bold">Cargar Avatar</p>
+        <h1 class="text-center">{{usuario}}</h1>
+        {% csrf_token %} {{ miFormulario.as_p }}
+
+        <button type="submit" class="btn btn-primary mt-3">Agregar Avatar</button>
+      </form>
+    </div>
+  </div>
+</main>
+
+{% endblock %}
