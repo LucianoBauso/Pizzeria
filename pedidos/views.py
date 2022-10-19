@@ -63,14 +63,15 @@ def salir(request):
 
 @login_required
 def avatar(request):
+       
     avatares = Avatar.objects.filter(user=request.user.id)
-
     return render(request,'base.html',{'url': avatares[0].imagen.url})
 
 @login_required
 def pedidos(request):
     pedidos = Pedidos.objects.filter(user=request.user, enviado__isnull=True)
-    return render(request, 'pedidos.html', {'pedidos': pedidos})
+    avatares = Avatar.objects.filter(user=request.user.id)
+    return render(request, 'pedidos.html', {'pedidos': pedidos, 'url': avatares[0].imagen.url})
 
 @login_required
 def pedidos_completados(request):

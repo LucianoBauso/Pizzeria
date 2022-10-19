@@ -17,16 +17,17 @@ class PedidosForm(forms.ModelForm):
         
 
 class UserEditForm(UserChangeForm):
-       
-       username = forms.CharField(widget= forms.TextInput(attrs={'placeholder': 'Username'}))
-       email = forms.EmailField(widget= forms.TextInput(attrs={'placeholder': 'Email'}))
-       first_name = forms.CharField(widget= forms.TextInput(attrs={'placeholder': 'Nombre'}))
-       last_name = forms.CharField(widget= forms.TextInput(attrs={'placeholder': 'Apellido'}))
-       password = forms.CharField(widget= forms.PasswordInput(attrs={'placeholder': 'Contraseña'}))
-       #password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
-       #password2 = forms.CharField(label='Repetir contraseña', widget=forms.PasswordInput)
-       
-       class Meta:
+    
+    username = forms.CharField(widget= forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}))
+    email = forms.EmailField(widget= forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
+    first_name = forms.CharField(widget= forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre'}))
+    last_name = forms.CharField(widget= forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Apellido'}))
+    password = forms.CharField(widget= forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':'Contraseña'}))
+    #password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
+    #password2 = forms.CharField(label='Repetir contraseña', widget=forms.PasswordInput)
+
+    class Meta:
         model = User
         fields = [ 'username', 'email', 'first_name', 'last_name', 'password']
         help_texts = {k:"" for k in fields}
+        

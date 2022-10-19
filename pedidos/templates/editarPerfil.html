@@ -1,14 +1,18 @@
+{% extends 'base.html' %} {% block content %}
 
-<h1>Formulario - Editar Perfil</h1>
-<h1>De {{usuario}}</h1>
+<main class="container">
+  <div class="row">
+    <div class="col-md-4 offset-md-4 mt-5">
+      <form method="POST" class="card card-body">
+        <p class="text-center bold">Editar Perfil De</p>
+        <h1 class="text-center">{{usuario}}</h1>
+        {% csrf_token %} {{ form.as_table }}
 
-<form method="POST">{% csrf_token %}
+        <button type="submit" class="btn btn-primary mt-3">Editar</button>
+      </form>
+      <a href="">Cambiar Contraseña</a>
+    </div>
+  </div>
+</main>
 
-    <table>
-        {{ form.as_table }}
-    </table>
-
-    <input type="submit", value="Editar">
-
-</form>
-<a href="">Cambiar Contraseña</a>
+{% endblock %}
